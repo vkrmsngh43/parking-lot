@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.parker.parkinglot.config.Commands;
 import com.parker.parkinglot.constants.DisplayConstants;
 import com.parker.parkinglot.exception.ParkingLotException;
 import com.parker.parkinglot.processor.ExecutorService;
@@ -28,28 +29,40 @@ public class ParkingLotApplication {
 
 	public static void executeInteractiveMode() {
 
-		System.out.print(DisplayConstants.displayMessage);
-		ExecutorService executorService = new ExecutorService();
-		executorService.init(new ParkingLotServiceImpl());
 		BufferedReader reader = null;
 		String input = null;
 		try {
-			while (true) {
+			System.out.print(DisplayConstants.displayMessage);
+			ExecutorService executorService = new ExecutorService();
+			executorService.init(new ParkingLotServiceImpl());
 
-				reader = new BufferedReader(new InputStreamReader(System.in));
-				input = reader.readLine().trim();
-				if (input.equalsIgnoreCase("exit")) {
-					
-					System.out.println("Thank you!");
-					break;
-					
-				} else {
-					executorService.execute(input);
+			while (true) {
+				try {
+					reader = new BufferedReader(new InputStreamReader(System.in));
+					input = reader.readLine().trim();
+					if (input.equalsIgnoreCase("exit")) {
+
+						System.out.println("Thank you!");
+						break;
+
+					} else {
+
+						if (Commands.getAllCommands().contains(input.split(" ")[0])) {
+							executorService.execute(input);
+						} else {
+							System.out.println("Invalid Command Entered.");
+							System.out.print(DisplayConstants.displayMessage);
+						}
+
+					}
+				} catch (ParkingLotException ex) {
+					System.out.println(ex.getMessage());
 				}
+
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("An error occurred. Please try again. Message " + e.getMessage());
 		} finally {
 			try {
 				if (reader != null) {
@@ -72,10 +85,12 @@ public class ParkingLotApplication {
 
 			while ((input = bufferReader.readLine()) != null) {
 				input = input.trim();
-				try {
+				if (Commands.getAllCommands().contains(input)) {
 					executorService.execute(input);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+
+				} else {
+					System.out.println("File Contains an Invali command.");
+					break;
 				}
 
 			}

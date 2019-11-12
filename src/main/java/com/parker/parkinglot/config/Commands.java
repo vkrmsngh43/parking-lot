@@ -5,6 +5,7 @@ package com.parker.parkinglot.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author vikramsingh
@@ -34,6 +35,10 @@ public class Commands {
 	
 	public static Map<String, Integer> getCommndVsArgCountMapping() {
 		return commandVsArgCount;
+	}
+	
+	public static Set<String> getAllCommands() {
+		return commandVsArgCount.keySet();
 	}
 
 }

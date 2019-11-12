@@ -96,7 +96,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 		try {
 
 			String message = parkingManager.leave(parkingLevel, slotNumber) ? "Slot number " + slotNumber + " is free"
-					: "Slot number is already empty";
+					: "Slot number " +slotNumber + " is already empty";
 			print(message);
 
 		} catch (Exception e) {
